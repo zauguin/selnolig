@@ -61,7 +61,7 @@ blocknode.user_id = identifier
 local suppression_on = true  -- if false, selnolig_process_ligatures won't do anything
 
 local prefix_length = function ( word , byte )
-  return unicode.utf8.len ( string.sub ( word , 0 , byte ) )
+  return utf8.len ( string.sub ( word , 0 , byte ) )
 end
 
   -- Problem: string.find and unicode.utf8.find return
@@ -74,14 +74,14 @@ local unicode_find = function ( s , pattern , position )
   if position ~= nil then
     -- selnolig_debug_info("SNL Position: "..position)
     sub = string.sub(s, 1, position)
-    position=position+string.len(sub) - unicode.utf8.len(sub)
+    position=position+string.len(sub) - utf8.len(sub)
     -- selnolig_debug_info("SNL Corrected position: "..position)
   end
   -- Now execute find and fix it accordingly
-  byte_pos = unicode.utf8.find(s, pattern, position)
+  byte_pos = string.find(s, pattern, position)
   if byte_pos ~= nil then
     -- "convert" byte_pos to "unicode_pos"
-    return unicode.utf8.len( string.sub(s, 1, byte_pos) )
+    return utf8.len( string.sub(s, 1, byte_pos) )
   else
     return nil
   end
@@ -119,7 +119,7 @@ local function selnolig_process_ligatures(nodes,tail)
      local last=node.tail(head)
      for curr in node.traverse_id(glyph,head) do
        if ligatures[i]==1 then
-         selnolig_debug_info("SNL Inserting nolig whatsit before glyph: " ..unicode.utf8.char(curr.char))
+         selnolig_debug_info("SNL Inserting nolig whatsit before glyph: " ..utf8.char(curr.char))
          node.insert_before(hh,curr, node.copy(blocknode))
          hh=curr
        end
@@ -131,12 +131,12 @@ local function selnolig_process_ligatures(nodes,tail)
        i=i+1
      end
      if(last~=nil) then
-       selnolig_debug_info("SNL Last char: "..unicode.utf8.char(last.char))
+       selnolig_debug_info("SNL Last char: "..utf8.char(last.char))
      end
   end
   for t in node.traverse(nodes) do
     if t.id==glyph then
-      s[#s+1]=unicode.utf8.char(t.char)
+      s[#s+1]=utf8.char(t.char)
     end
     if ( t.id==glue or t.next==nil or t.id==kern or t.id==rule ) then
       local f=string.gsub(table.concat(s,""),"[\\?!,\\.]+","")
