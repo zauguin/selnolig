@@ -44,7 +44,7 @@ for n,v in pairs ( node.whatsits() ) do
   if v == 'user_defined' then userdefined = n end
 end
 
-local identifier = 123456  -- any unique identifier
+local identifier = luatexbase.new_whatsit('selnolig')
 local noliga={}
 local keepliga={}          -- String -> Boolean
 
@@ -176,6 +176,7 @@ local function selnolig_process_ligatures(nodes,tail)
       current_node = t
     end
   end
+  return nodes
 end -- end of function selnolig_process_ligatures(nodes,tail)
 
 function selnolig.suppress_liga(s,t)
